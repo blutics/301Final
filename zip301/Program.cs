@@ -18,7 +18,7 @@ namespace zip301
             }
             try
             {
-                FileStrem input = new FileStream("biglog.txt", FileAccess.Read, FileMode.Open);
+                FileStream input = new FileStream("biglog.txt", FileMode.Open, FileAccess.Read);
                 //BufferedStream file = new BufferedStream(input, 4096 * 100);//, FileMode.Open, FileAccess.Read);
                 Compression process = new Compression(input);
             }
