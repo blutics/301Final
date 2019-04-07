@@ -8,35 +8,43 @@ namespace zip301
 {
     class Node
     {
-        public string name;
-        public int id;
-        int age;
-        string job;
-        int year;
-        public string rawdata;
-        public Node(string data)
+        public double weight;
+        public double height;
+        public char letter;
+        public Node left;
+        public Node right;
+        public int freq = 0;
+        public Node()
         {
-            string[] tmp = data.Split('|');
-            name = tmp[0];
-            id = int.Parse(tmp[1]);
-            age = int.Parse(tmp[2]);
-            job = tmp[3];
-            year = int.Parse(tmp[4]);
-            rawdata = data;
+            height = 0;
+            freq = 0;
+            left = null;
+            right = null;
+        }
+        public Node(char data, int value)
+        {
+            this.letter = data;
+            this.freq = value;
+            left = null;
+            right = null;
+        }
+        public void setLeft(Node node)
+        {
+            this.left = node;
+
+        }
+        public void setRight(Node node)
+        {
+            this.right = node;
+        }
+        public double getWeight()
+        {
+            return freq - (500-letter) / 10000 - (500-height) / 1000000000;
         }
         public void print()//This will print out employee's information with a strict format
         {
             Console.WriteLine("===================================");
-            Console.WriteLine(String.Format("|{0,-10:s} : {1,-20:s}|", "Name", name));
-            Console.WriteLine(String.Format("|{0,-10:s} : {1,-20:d}|", "ID", id));
-            Console.WriteLine(String.Format("|{0,-10:s} : {1,-20:d}|", "Age", age));
-            Console.WriteLine(String.Format("|{0,-10:s} : {1,-20:s}|", "Job", job));
-            Console.WriteLine(String.Format("|{0,-10:s} : {1,-20:d}|", "year", year));
             Console.WriteLine("===================================");
-        }
-        public string RawPrint()
-        {
-            return rawdata;
         }
     }
 }
