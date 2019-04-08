@@ -18,7 +18,7 @@ namespace zip301
             }
             try
             {
-                FileStream input = new FileStream("palindrome.txt", FileMode.Open, FileAccess.Read);
+                FileStream input = new FileStream("biglog.txt", FileMode.Open, FileAccess.Read);
                 //BufferedStream file = new BufferedStream(input, 4096 * 100);//, FileMode.Open, FileAccess.Read);
                 Compression process = new Compression(input);
 

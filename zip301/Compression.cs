@@ -17,13 +17,11 @@ namespace zip301
         public MinPriorityQueue queue;
         public string[] map = new string[128];
         public Node root;
-        public BitArray[] bitMap;
         public Compression(FileStream file)
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            bitMap = new BitArray[128];
             string[] tmp = file.Name.Split('\\');
             filename = tmp[tmp.Length - 1].Split('.')[0];
             queue = new MinPriorityQueue();
@@ -62,13 +60,28 @@ namespace zip301
             CodeFilling(map, root, "");
 
             BytesCollector a = new BytesCollector();
-            byte[] bytes;
-       
+            
             for (int k = 0; k < 128; k++)
             {
                 if (count[k] != 0)
                 {
-                    a.Insert(map[k] + " " + (char)k);
+                    if (k == '\n')
+                    {
+                        a.Insert(map[k] + " " + "newline\n");
+                    }else if (k==' ')
+                    {
+                        a.Insert(map[k] + " " + "space\n");
+                    }else if (k == '\t')
+                    {
+                        a.Insert(map[k] + " " + "tab\n");
+                    }else if (k == '\r')
+                    {
+                        a.Insert(map[k] + " " + "return\n");
+                    }
+                    else
+                    {
+                        a.Insert(map[k] + " " + (char)k+"\n");
+                    }
                     //Console.WriteLine(map[k] + " " + (char)k);
                 }
             }
@@ -77,6 +90,11 @@ namespace zip301
             for(int k = 0; k < textLength; k++)
             {
                 stringResult.Append(map[data[k]]);
+                //Console.WriteLine(map[data[k]]);
+            }
+            for(int k = 0; k<100; k++)
+            {
+                //Console.WriteLine(stringResult[k]);
             }
             int p = stringResult.Length % 8;
             if (p != 0)
@@ -88,18 +106,17 @@ namespace zip301
             }
             byte[] byteBuffer = new byte[(int)(stringResult.Length / 8)];
             string binaryString = stringResult.ToString();
-            for(int k = 0; k < (int)(stringResult.Length / 8); k++)
+            for (int k = 0; k < (int)(stringResult.Length / 8); k++)
             {
-                byteBuffer[k]=Convert.ToByte(binaryString.Substring(0*8,8),2);
+                byteBuffer[k]=Convert.ToByte(binaryString.Substring(k*8,8),2);
             }
             Console.WriteLine(stringResult.Length);
-            
             Console.WriteLine("Compression Completed!");
 
             //Console.WriteLine(bitCount);
-            a.Insert("*****");
+            a.Insert("*****\n");
+            a.Insert(String.Format("{0}\n",stringResult.Length-6));
             byte[] buffer = a.ByteChunk();
-            Console.WriteLine(filename);
             Stream output = File.OpenWrite(filename + ".zip301");
             BufferedStream open = new BufferedStream(output);
             open.Write(buffer, 0, buffer.Length);
