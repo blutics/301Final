@@ -29,7 +29,9 @@ namespace zip301
             this.textLength = (int)file.Length;
             BufferedStream bs = new BufferedStream(file);
             //Console.WriteLine(textLength/unit);
-            Console.WriteLine(String.Format("Text Length : {0}",textLength));
+            Console.WriteLine("========================================================");
+            Console.WriteLine(String.Format("{0,-37} : {1,10} bytes", "Original File Size", textLength));
+            Console.WriteLine("========================================================");
             byte[] data = new byte[textLength+unit-(textLength%unit)];
             int[] count = new int[128];
             for(int i = 0; i < (int)(textLength / unit)+1; i++)
@@ -37,14 +39,14 @@ namespace zip301
                 bs.Read(data, unit*i, unit);
                 //Console.WriteLine(String.Format("{0} : Success!", i));
             }
-            Console.WriteLine("Finished Reading!");
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Finished Reading", sw.ElapsedMilliseconds.ToString()));
             for (int i = 0; i < textLength; i++)
             {
                count[data[i]] += 1;
             }
-            Console.WriteLine("Counting Completed!");
-            
-            for(int i = 0; i < count.Length; i++)
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Counting Complete", sw.ElapsedMilliseconds.ToString()));
+
+            for (int i = 0; i < count.Length; i++)
             {
                 //Console.WriteLine(String.Format("{0,2} : {1,10}", Convert.ToChar(i), count[i]));
                 if (count[i] != 0)
@@ -53,10 +55,9 @@ namespace zip301
                 }
             }
 
-            
-            Console.WriteLine("Queueing Completed!");
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Queueing Completed", sw.ElapsedMilliseconds.ToString()));
             root = Huffman(queue);
-            Console.WriteLine("Huffman Completed!");
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Huffman Tree Prepared", sw.ElapsedMilliseconds.ToString()));
             CodeFilling(map, root, "");
 
             BytesCollector a = new BytesCollector();
@@ -110,8 +111,8 @@ namespace zip301
             {
                 byteBuffer[k]=Convert.ToByte(binaryString.Substring(k*8,8),2);
             }
-            Console.WriteLine(stringResult.Length);
-            Console.WriteLine("Compression Completed!");
+
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Compression Completed", sw.ElapsedMilliseconds.ToString()));
 
             //Console.WriteLine(bitCount);
             a.Insert("*****\n");
@@ -121,10 +122,13 @@ namespace zip301
             BufferedStream open = new BufferedStream(output);
             open.Write(buffer, 0, buffer.Length);
             open.Write(byteBuffer, 0, byteBuffer.Length);
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Writing Finished", sw.ElapsedMilliseconds.ToString()));
+            Console.WriteLine("========================================================");
+
             open.Close();
             sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds.ToString() + "ms");
-
+            Console.WriteLine(String.Format("{0,-37} : {1,11} bits\n", "The number of Compressed Data bits", stringResult.Length - 6));
+            Console.WriteLine("========================================================");
 
         }
         public Node Huffman(MinPriorityQueue queue)

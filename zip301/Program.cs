@@ -11,14 +11,14 @@ namespace zip301
     {
         static void Main(string[] args)
         {
-           
-            if (args.Length != 0)
+            if (args.Length == 0)
             {
-                Console.WriteLine("Need an object of compression!");
+                Console.WriteLine("Need a file!");
+                return;
             }
             try
             {
-                FileStream input = new FileStream("biglog.txt", FileMode.Open, FileAccess.Read);
+                FileStream input = new FileStream(args[0], FileMode.Open, FileAccess.Read);
                 //BufferedStream file = new BufferedStream(input, 4096 * 100);//, FileMode.Open, FileAccess.Read);
                 Compression process = new Compression(input);
 

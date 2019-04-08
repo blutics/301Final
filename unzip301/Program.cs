@@ -11,13 +11,14 @@ namespace unzip301
     {
         static void Main(string[] args)
         {
-            if (args.Length != 0)
+            if (args.Length == 0)
             {
-                Console.WriteLine("Need an object of compression!");
+                Console.WriteLine("Need an file!");
+                return;
             }
             try
             {
-                FileStream input = new FileStream("biglog.zip301", FileMode.Open, FileAccess.Read);
+                FileStream input = new FileStream(args[0], FileMode.Open, FileAccess.Read);
                 //BufferedStream file = new BufferedStream(input, 4096 * 100);//, FileMode.Open, FileAccess.Read);
                 Decompression process = new Decompression(input);
 

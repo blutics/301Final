@@ -27,7 +27,9 @@ namespace unzip301
             this.zipLength = (int)file.Length;
             BufferedStream bs = new BufferedStream(file);
             //Console.WriteLine(zipLength/unit);
-            Console.WriteLine(String.Format("Text Length : {0}", zipLength));
+            Console.WriteLine("========================================================");
+            Console.WriteLine(String.Format("{0,-37} : {1,10} bytes", "Compressed File Size", zipLength));
+            Console.WriteLine("========================================================");
             byte[] data = new byte[zipLength + unit - (zipLength % unit)];
             int[] count = new int[128];
             for (int i = 0; i < (int)(zipLength / unit) + 1; i++)
@@ -35,7 +37,8 @@ namespace unzip301
                 bs.Read(data, unit * i, unit);
                 //Console.WriteLine(String.Format("{0} : Success!", i));
             }
-            Console.WriteLine("Finished Reading!");
+
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Finished Reading", sw.ElapsedMilliseconds.ToString()));
 
             int readIndex = 0;
             string stringBuffer = "";
@@ -122,20 +125,18 @@ namespace unzip301
 
                 currentState = 1;
             }
- 
-            Console.WriteLine("Head Information Collected!");
 
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Head Information Collected", sw.ElapsedMilliseconds.ToString()));
             StringBuilder binaryString = new StringBuilder();
             for(int i = readIndex; i < zipLength; i++)
             {
                 binaryString.Append(Convert.ToString(data[i], 2).PadLeft(8, '0'));
             }
-
-            Console.WriteLine("Binary String Prepared");
-
+   
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Binary String Prepared", sw.ElapsedMilliseconds.ToString()));
             StringBuilder resultString = new StringBuilder();
             currentState = 1;
-            Console.WriteLine(binaryString.Length);
+            
             string stringData = binaryString.ToString();
             for (int i = 0; i<stringData.Length; i++)
             {
@@ -154,16 +155,18 @@ namespace unzip301
                     currentState = 1;
                 }
             }
-            
+
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Decoding Finished", sw.ElapsedMilliseconds.ToString()));
             byte[] result = Encoding.ASCII.GetBytes(resultString.ToString());
 
             Stream output = File.OpenWrite(filename + "2.txt");
             BufferedStream open = new BufferedStream(output);
             open.Write(result, 0, result.Length);
+            Console.WriteLine(String.Format("{0,-37} : {1,13} ms", "Writing Finished", sw.ElapsedMilliseconds.ToString()));
+            Console.WriteLine("========================================================");
             open.Close();
-
-            sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds.ToString() + "ms");
+            Console.WriteLine(String.Format("{0,-37} : {1,10} bytes\n", "Resulting File size", resultString.Length));
+            Console.WriteLine("========================================================");
         }
     }
 }
