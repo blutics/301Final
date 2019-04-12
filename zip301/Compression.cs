@@ -30,6 +30,7 @@ namespace zip301
             BufferedStream bs = new BufferedStream(file);
             //Console.WriteLine(textLength/unit);
             Console.WriteLine("========================================================");
+            Console.WriteLine(String.Format("{0,-37} : {1,16}", "Input File", tmp[tmp.Length - 1]));
             Console.WriteLine(String.Format("{0,-37} : {1,10} bytes", "Original File Size", textLength));
             Console.WriteLine("========================================================");
             byte[] data = new byte[textLength+unit-(textLength%unit)];

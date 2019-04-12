@@ -28,6 +28,7 @@ namespace unzip301
             BufferedStream bs = new BufferedStream(file);
             //Console.WriteLine(zipLength/unit);
             Console.WriteLine("========================================================");
+            Console.WriteLine(String.Format("{0,-37} : {1,16}", "Input File", tmp[tmp.Length - 1]));
             Console.WriteLine(String.Format("{0,-37} : {1,10} bytes", "Compressed File Size", zipLength));
             Console.WriteLine("========================================================");
             byte[] data = new byte[zipLength + unit - (zipLength % unit)];
